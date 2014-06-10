@@ -118,6 +118,8 @@ void MapLayer::initData( const int rowBK, const int columnBK, const cocos2d::CCP
 	m_matter = CCSprite::create("CloseNormal.png");
 	m_matter->setPosition(ccp(200, 200));
 	this->addChild(m_matter);
+
+	this->scheduleUpdate();
 }
 
 ///@brief 处理外界每次点击
@@ -152,15 +154,18 @@ void MapLayer::onDealTouch( float delta )
 
 	do 
 	{
-		/// 首先预判断主角是否将会超出视口外
-		if (isRoleOutView(pointBy))
+		/// 首先预判断主角是否将会超出视口外并且当前在视口内
+		if (isRoleOutView(pointBy) && !isRoleOutView(ccp(0, 0)))
 		{
 			m_iMoveState = MAP_E_MOVE_ALL;	///< 地图和主角一起移动
 		}
-		else
+
+		/// 首先预判断主角是否将会超出视口外并且当前在不在视口内
+		if (isRoleOutView(pointBy) && isRoleOutView(ccp(0, 0)))
 		{
-			m_iMoveState = MAP_E_MOVE_ROLE;	///< 只移动主角即可
+			m_iMoveState = MAP_E_MOVE_ROLE;	///< 地图和主角一起移动
 		}
+		
 
 		/// 预判断是否会超出地图屏幕外
 		if (isBKOut(pointBy) && m_iMoveState == MAP_E_MOVE_ALL)
@@ -287,7 +292,7 @@ bool MapLayer::isRoleOutView( cocos2d::CCPoint pointBy )
 	CCPoint subRoleMap = pointRole + this->getPosition();	///< 将主角位置转换成世界位置
 	CCPoint subRoleView = subRoleMap - m_pointCenter;		///< 获取主角世界位置与视口位置偏差
 
-	if (abs(subRoleView.x - pointBy.x) > m_sizeView.width/2.f || abs(subRoleView.y - pointBy.y) > m_sizeView.height/2.f)
+	if (abs(subRoleView.x - pointBy.x) > m_sizeView.width/2.f+1.f || abs(subRoleView.y - pointBy.y) > m_sizeView.height/2.f + 1.f)
 	{
 		return true;
 	}
@@ -335,4 +340,38 @@ bool MapLayer::isCollsionRect( cocos2d::CCPoint a0, float aWidth, float aHeight,
 	}
 	
 	return false;
+}
+
+///@brief 判断哪些地图不在视口内，就不显示
+///@param[] void
+///@pre 在update内，每一帧都要调用
+///@retval 
+///@post 
+///@author DionysosLai 906391500@qq.com
+///@version 1.0
+///@data 2014-6-10 23:26
+void MapLayer::setMapVisible( void )
+{
+	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
+	CCPoint parentPoint = this->getPosition();		///< 获取层的坐标
+
+	for (unsigned int i = 0; i < m_pArrayBK->capacity(); ++i)
+	{
+		CCSprite* bkSprite = (CCSprite*)m_pArrayBK->objectAtIndex(i);
+		CCPoint mapPoint = bkSprite->getPosition() + parentPoint;
+		if (abs(mapPoint.x - visibleSize.width/2.f) > visibleSize.width ||
+			abs(mapPoint.y - visibleSize.height/2.f) > visibleSize.height)
+		{
+			bkSprite->setVisible(false);
+		}
+		else
+		{
+			bkSprite->setVisible(true);
+		}
+	}
+}
+
+void MapLayer::update( float delta )
+{
+	setMapVisible();
 }

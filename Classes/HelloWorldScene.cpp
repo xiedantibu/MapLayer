@@ -31,9 +31,9 @@ bool HelloWorld::init()
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 	
 	CCSize size;
-	size.width = 50.f;
-	size.height = 50.f;
-	m_map = MapLayer::create(2, 2, ccp(visibleSize.width/2.f, visibleSize.height/2.f), size, 5.f);
+	size.width = 5.f;
+	size.height = 5.f;
+	m_map = MapLayer::create(100, 100, ccp(visibleSize.width/2.f, visibleSize.height/2.f), size, 5.f);
 	m_map->setPosition(ccp(visibleSize.width/2.f, visibleSize.height/2.f));
 	this->addChild(m_map, -1);
 
@@ -74,8 +74,8 @@ void HelloWorld::draw()
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 
 	glLineWidth( 5.0f );
-	CCPoint point1 = ccp(visibleSize.width/2.f - 25.f, visibleSize.height/2.f + 25.f);
-	CCPoint point2 = ccp(visibleSize.width/2.f + 25.f, visibleSize.height/2.f - 25.f);
+	CCPoint point1 = ccp(visibleSize.width/2.f - 5.f, visibleSize.height/2.f + 5.f);
+	CCPoint point2 = ccp(visibleSize.width/2.f + 5.f, visibleSize.height/2.f - 5.f);
 	ccDrawRect(point1, point2);
 	glLineWidth( 1.0f );
 }
