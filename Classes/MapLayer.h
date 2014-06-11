@@ -90,6 +90,12 @@ private:
 ///@return 
 	void setMapVisible(void);
 
+///@brief 判断角色是否向视口移动趋势
+///@param[in] pointBy--主角移动向量
+///@pre 
+///@return 
+	bool roleToView(cocos2d::CCPoint pointBy);
+
 	cocos2d::CCArray* m_pArrayBK;		///< 背景地图对象
 	int m_iBKRow;						///< 背景地图行数
 	int m_iBKColumn;					///< 背景地图列数
