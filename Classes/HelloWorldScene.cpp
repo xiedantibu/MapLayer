@@ -31,9 +31,9 @@ bool HelloWorld::init()
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 	
 	CCSize size;
-	size.width = 5.f;
-	size.height = 5.f;
-	m_map = MapLayer::create(1, 3, ccp(visibleSize.width/2.f, visibleSize.height/2.f), size, 5.f);
+	size.width = 0.f;
+	size.height = 0.f;
+	m_map = MapLayer::create(2, 3, ccp(visibleSize.width/2.f, visibleSize.height/2.f), size, 5.f);
 	m_map->setPosition(ccp(visibleSize.width/2.f, visibleSize.height/2.f));
 	this->addChild(m_map, -1);
 

@@ -161,7 +161,15 @@ void MapLayer::onDealTouch( float delta )
 		}
 		else
 		{
-			m_iMoveState = MAP_E_MOVE_ROLE;	///< 主角移动
+			/// 已经在视口外面了，就判断是否有想视口移动趋势
+			if (roleToView(pointBy))
+			{
+				m_iMoveState = MAP_E_MOVE_ROLE;	///< 主角移动
+			}
+			else
+			{
+				m_iMoveState = MAP_E_MOVE_ALL;	///< 地图和主角一起移动
+			}
 		}
 
 		if (isCollision(ccpMult(pointBy, 2.f)))
@@ -364,4 +372,28 @@ void MapLayer::setMapVisible( void )
 void MapLayer::update( float delta )
 {
 	setMapVisible();
+}
+
+///@brief 判断角色是否向视口移动趋势
+///@param[in] pointBy--主角移动向量
+///@pre 前者条件
+///@return 说明
+///@retval 返回值 说明, 这个是可选的
+///@post 说明函数完成后的世界状态
+///@author DionysosLai 906391500@qq.com
+///@version 1.0
+///@data 2014-6-12 23:49
+
+bool MapLayer::roleToView( cocos2d::CCPoint pointBy )
+{
+	CCPoint pointRole = m_pRole->getPosition();				///< 获取主角位置
+	CCPoint subRoleMap = pointRole + this->getPosition();	///< 将主角位置转换成世界位置
+	CCPoint subRoleView = subRoleMap - m_pointCenter;		///< 获取主角世界位置与视口位置偏差
+
+	if (abs(subRoleView.x - pointBy.x) < abs(subRoleView.x) &&  abs(subRoleView.y - pointBy.y) < abs(subRoleView.y))
+	{
+		return true;
+	}
+
+	return false;
 }
