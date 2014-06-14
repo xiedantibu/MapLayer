@@ -13,18 +13,14 @@ public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cocos2d::CCScene* scene();
     
-    // a selector callback
-    void menuCloseCallback(CCObject* pSender);
-    
+    void menuDemo1eCallback(CCObject* pSender);
+
+	void menuDemo2eCallback(CCObject* pSender);
+
     // implement the "static node()" method manually
     CREATE_FUNC(HelloWorld);
 public:
-	MapLayer* m_map;
 
-	virtual bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual void ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-
-	virtual void draw();
 };
 
 #endif // __HELLOWORLD_SCENE_H__

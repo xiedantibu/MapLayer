@@ -9,6 +9,9 @@
 *@data 2014-6-8 10:57
 */
 
+#ifndef __MAP_LAYER_H__
+#define __MAP_LAYER_H__
+
 #include "cocos2d.h"
 
 class MapLayer : public cocos2d::CCLayer
@@ -114,3 +117,5 @@ private:
 	cocos2d::CCSprite*  m_matter;
 
 };
+
+#endif //(__MAP_LAYER_H__)

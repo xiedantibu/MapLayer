@@ -154,7 +154,7 @@ void MapLayer::onDealTouch( float delta )
 
 	do 
 	{
-		/// 首先预判断主角是否将会超出视口外并且当前在视口内
+		/// 首先判断主角当前是否在视口内
 		if (isRoleInView(ccp(0,0)))
 		{
 			m_iMoveState = MAP_E_MOVE_ALL;	///< 地图和主角一起移动
@@ -204,6 +204,12 @@ void MapLayer::onDealTouch( float delta )
 		break;
 	case MAP_E_MOVE_STOP:
 		{
+			CCPoint pointMap = this->getPosition();
+			pointMap = pointMap - pointBy*2.f;
+			this->setPosition(pointMap);
+
+			adjustBK(-pointBy*2.f);
+
 			CCPoint pointRole = m_pRole->getPosition();
 			pointRole = pointRole + ccpMult(pointBy, 2.f);
 			m_pRole->setPosition(pointRole);

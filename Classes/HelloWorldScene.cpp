@@ -1,5 +1,6 @@
 #include "HelloWorldScene.h"
-
+#include "Demo1.h"
+#include "Demo2.h"
 USING_NS_CC;
 
 CCScene* HelloWorld::scene()
@@ -30,52 +31,35 @@ bool HelloWorld::init()
     CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 	
-	CCSize size;
-	size.width = 0.f;
-	size.height = 0.f;
-	m_map = MapLayer::create(2, 3, ccp(visibleSize.width/2.f, visibleSize.height/2.f), size, 5.f);
-	m_map->setPosition(ccp(visibleSize.width/2.f, visibleSize.height/2.f));
-	this->addChild(m_map, -1);
+	CCMenuItemImage *pDemo1 = CCMenuItemImage::create(
+		"demo1.png",
+		"demo1.png",
+		this,
+		menu_selector(HelloWorld::menuDemo1eCallback));
+	pDemo1->setPosition(ccp(visibleSize.width/4.f, visibleSize.height/2.f));
 
-	/// Î¯ÍÐ´¥ÃþÐ­Òé
-	CCDirector* pDirector = CCDirector::sharedDirector();
-	pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+	CCMenuItemImage *pDemo2 = CCMenuItemImage::create(
+		"demo2.png",
+		"demo2.png",
+		this,
+		menu_selector(HelloWorld::menuDemo2eCallback));
+	pDemo2->setPosition(ccp(visibleSize.width/4.f*3.f, visibleSize.height/2.f));
+
+	CCMenu* pMenu = CCMenu::create(pDemo1, pDemo2, NULL);
+	pMenu->setPosition(CCPointZero);
+	this->addChild(pMenu, 1);
     
     return true;
 }
 
-
-void HelloWorld::menuCloseCallback(CCObject* pSender)
+void HelloWorld::menuDemo1eCallback( CCObject* pSender )
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT) || (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
-	CCMessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
-#else
-    CCDirector::sharedDirector()->end();
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
-#endif
+	CCScene* scene = Demo1::scene();
+	CCDirector::sharedDirector()->replaceScene(scene);
 }
 
-bool HelloWorld::ccTouchBegan( cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent )
+void HelloWorld::menuDemo2eCallback( CCObject* pSender )
 {
-	return true;
-}
-
-void HelloWorld::ccTouchEnded( cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent )
-{
-	CCPoint	touchPoint	= pTouch->getLocationInView();
-	touchPoint			= CCDirector::sharedDirector()->convertToGL(touchPoint);
-	m_map->dealTouch(touchPoint);
-}
-
-void HelloWorld::draw()
-{
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-
-	glLineWidth( 5.0f );
-	CCPoint point1 = ccp(visibleSize.width/2.f - 5.f, visibleSize.height/2.f + 5.f);
-	CCPoint point2 = ccp(visibleSize.width/2.f + 5.f, visibleSize.height/2.f - 5.f);
-	ccDrawRect(point1, point2);
-	glLineWidth( 1.0f );
+	CCScene* scene = Demo2::scene();
+	CCDirector::sharedDirector()->replaceScene(scene);
 }
